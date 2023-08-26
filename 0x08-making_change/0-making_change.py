@@ -1,6 +1,14 @@
 #!/usr/bin/python3
+"""
+Module documentation for 0-making)change.py
+"""
+
 
 def makeChange(coins, total):
+    """
+    A function that  determine the fewest number
+    of coins needed to meet a given amount
+    """
     if total < 1:
         return 0
     coins = sorted(coins, reverse=True)

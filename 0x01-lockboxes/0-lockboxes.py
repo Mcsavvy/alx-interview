@@ -10,16 +10,24 @@ def canUnlockAll(boxes):
     """
 
     collected_keys = {0}
-    key = boxes[0]
+    locked_boxes = set(range(1, len(boxes)))
+    boxes[0]
 
     def search_box(box):
-        for key in boxes[box]:
+        new_keys = (set(boxes[box])
+                    .intersection(locked_boxes)
+                    .difference(collected_keys))
+        for key in new_keys:
+            collected_keys.add(key)
+        for key in new_keys:
             if key > len(boxes) - 1:
                 # invalid key
                 continue
-            if key not in collected_keys:
-                collected_keys.add(key)
+            locked_boxes.remove(key)
+            if (set(boxes[key])
+                    .intersection(locked_boxes)
+                    .difference(collected_keys)):
                 search_box(key)
 
     search_box(0)
-    return len(collected_keys) == len(boxes)
+    return len(locked_boxes) == 0

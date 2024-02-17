@@ -4,20 +4,19 @@
 
 PlayerID = int
 PlayerName = str
+prime_map: 'dict[int, bool]' = {}
 
 
-def isPrime(n: int) -> bool:
-    """checks if a number is a prime number."""
-    if n == 1:
-        return False
-    elif n == 2:
-        return True
-    elif n % 2 == 0:
-        return True
-    for i in range(3, (n // 2), 2):
-        if n % i == 0:
-            return False
-    return True
+def sieveOfEratosthenes(n):
+    """Returns all prime numbers from 1 - n (inclusive)."""
+    prime = [True for i in range(n+1)]
+    p = 2
+    while (p * p <= n):
+        if (prime[p]):
+            for i in range(p * p, n+1, p):
+                prime[i] = False
+        p += 1
+    return prime
 
 
 def playRound(r: int) -> PlayerID:
@@ -33,11 +32,6 @@ def playRound(r: int) -> PlayerID:
         if player == 0:
             return 1
         return 0
-
-    # we need to map numbers booleans indicating if they
-    # are prime numbers. This would help us avoid making multiple
-    # calls to `isPrime`.
-    prime_map = {n: isPrime(n) for n in number_range}
 
     while 1:
         # print(f"Current Player: {player}")
@@ -69,6 +63,13 @@ def isWinner(x: int, nums: 'list[int]') -> 'PlayerName | None':
     winners: list[PlayerID] = []
     if x != len(nums):
         return None
+
+    # we need to map numbers booleans indicating if they
+    # are prime numbers.
+    primes = sieveOfEratosthenes(max(nums))
+    for i in range(1, max(nums) + 1):
+        prime_map[i] = primes[i]
+
     for i in range(x):
         # print(f"Round {i + 1}")
         winner = playRound(nums[i])

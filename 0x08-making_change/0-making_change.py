@@ -1,26 +1,23 @@
 #!/usr/bin/python3
-"""
-Module documentation for 0-making)change.py
-"""
+"""Another application of greedy algorithm"""
 
 
-def makeChange(coins, total):
-    """
-    A function that  determine the fewest number
-    of coins needed to meet a given amount
-    """
-    if total < 1:
+def makeChange(coins: list, total):
+    """This function uses a greedy algorithm
+    to calculate the number of change needed for
+    for a larger denomination"""
+    result = 0
+    if total <= 0:
         return 0
-    coins = sorted(coins, reverse=True)
-    coin_sum = 0
-    count = 0
-
-    for coin in coins:
-        while coin + coin_sum <= total:
-            coin_sum += coin
-            count += 1
-        if coin_sum == total:
-            return count
-    if coin_sum == total:
-        return count
-    return -1
+    if not coins:
+        return -1
+    while True:
+        x = max(coins)
+        while x <= total:
+            total -= x
+            result += 1
+        coins.remove(x)
+        if total == 0:
+            return result
+        if coins == []:
+            return -1
